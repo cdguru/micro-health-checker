@@ -11,4 +11,4 @@ data/
 *.db
 *.db-shm
 *.db-wal
-micro-health-checker
+/micro-health-checker

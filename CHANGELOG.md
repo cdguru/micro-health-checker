@@ -17,4 +17,8 @@ All notable changes are documented here. The project follows [Semantic Versionin
 - In-page navigation from every compatibility-matrix product to its configuration recipe.
 - Bilingual public documentation with prominent language navigation and CI parity checks.
 
+### Fixed
+
+- Anchor the binary-only `.gitignore` rule so `cmd/micro-health-checker/main.go` is tracked and available to Docker builds.
+
 [Unreleased]: https://github.com/christiandente/micro-health-checker/commits/main

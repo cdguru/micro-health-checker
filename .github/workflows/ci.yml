@@ -36,6 +36,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
+      - name: Verify source entrypoint is tracked
+        run: |
+          test -f cmd/micro-health-checker/main.go
+          ! git check-ignore -q cmd/micro-health-checker/main.go
+
       - name: Set up Go
         uses: actions/setup-go@v7
         with:
