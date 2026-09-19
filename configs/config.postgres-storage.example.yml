@@ -1,0 +1,20 @@
+server:
+  address: ":8080"
+
+scheduler:
+  default_interval: 30s
+  default_timeout: 5s
+
+storage:
+  type: postgres
+  retention: 90d
+  postgres:
+    dsn: ${MHC_DATABASE_URL}
+
+checks:
+  - id: postgres-prod
+    name: PostgreSQL Production
+    type: postgres
+    postgres:
+      dsn: ${POSTGRES_PROD_DSN}
+      query: SELECT 1

@@ -1,0 +1,163 @@
+openapi: 3.1.0
+info:
+  title: micro-health-checker API
+  version: 0.1.0
+  description: REST gateway for status from non-HTTP services, with read-only history and live checks.
+  license:
+    name: Apache-2.0
+    identifier: Apache-2.0
+servers:
+  - url: http://localhost:8080
+paths:
+  /api/v1/status:
+    get:
+      summary: List cached check states
+      operationId: listStatus
+      responses:
+        "200":
+          description: Current summary and checks
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [version, summary, checks]
+                properties:
+                  version: {type: string}
+                  summary: {$ref: "#/components/schemas/Summary"}
+                  checks:
+                    type: array
+                    items: {$ref: "#/components/schemas/CheckResult"}
+  /api/v1/status/{id}:
+    get:
+      summary: Get one cached check state
+      operationId: getStatus
+      parameters:
+        - $ref: "#/components/parameters/CheckID"
+      responses:
+        "200":
+          description: Current check state
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/CheckResult"}
+        "404": {$ref: "#/components/responses/NotFound"}
+  /api/v1/history/{id}:
+    get:
+      summary: Get persisted result history
+      operationId: getHistory
+      parameters:
+        - $ref: "#/components/parameters/CheckID"
+        - name: limit
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 500, default: 50}
+      responses:
+        "200":
+          description: Result history, newest first
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  check_id: {type: string}
+                  history:
+                    type: array
+                    items: {$ref: "#/components/schemas/HistoryRecord"}
+        "404": {$ref: "#/components/responses/NotFound"}
+  /health/{id}:
+    get:
+      summary: Execute one live check
+      operationId: runHealthCheck
+      parameters:
+        - $ref: "#/components/parameters/CheckID"
+      responses:
+        "200":
+          description: Target is healthy
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/CheckResult"}
+        "503":
+          description: Target check failed or is disabled
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/CheckResult"}
+        "404": {$ref: "#/components/responses/NotFound"}
+    head:
+      summary: Execute one live check without a response body
+      operationId: headHealthCheck
+      parameters:
+        - $ref: "#/components/parameters/CheckID"
+      responses:
+        "200": {description: Target is healthy}
+        "503": {description: Target check failed or is disabled}
+        "404": {description: Check does not exist}
+  /-/healthy:
+    get:
+      summary: Process liveness
+      responses:
+        "200": {description: Process is alive}
+  /-/ready:
+    get:
+      summary: Service readiness
+      responses:
+        "200": {description: Storage is ready}
+        "503": {description: Storage is unavailable}
+  /metrics:
+    get:
+      summary: Prometheus metrics
+      responses:
+        "200":
+          description: Prometheus text exposition
+          content:
+            text/plain: {}
+components:
+  parameters:
+    CheckID:
+      name: id
+      in: path
+      required: true
+      schema: {type: string, maxLength: 64}
+  responses:
+    NotFound:
+      description: Check does not exist
+      content:
+        application/json:
+          schema: {$ref: "#/components/schemas/Error"}
+  schemas:
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error: {type: string}
+    Summary:
+      type: object
+      required: [total, ok, error, unknown, disabled]
+      properties:
+        total: {type: integer}
+        ok: {type: integer}
+        error: {type: integer}
+        unknown: {type: integer}
+        disabled: {type: integer}
+    CheckResult:
+      type: object
+      required: [id, name, type, status, success, duration_ms, consecutive_failures]
+      properties:
+        id: {type: string}
+        name: {type: string}
+        type: {type: string, enum: [tcp, http, postgres]}
+        status: {type: string, enum: [ok, error, unknown, disabled]}
+        success: {type: boolean}
+        started_at: {type: string, format: date-time}
+        duration_ms: {type: number, minimum: 0}
+        error: {type: string}
+        last_changed_at: {type: string, format: date-time}
+        consecutive_failures: {type: integer, minimum: 0}
+    HistoryRecord:
+      type: object
+      required: [check_id, name, type, success, started_at, duration_ms]
+      properties:
+        check_id: {type: string}
+        name: {type: string}
+        type: {type: string}
+        success: {type: boolean}
+        started_at: {type: string, format: date-time}
+        duration_ms: {type: number, minimum: 0}
+        error: {type: string}

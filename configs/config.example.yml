@@ -1,0 +1,43 @@
+server:
+  address: ":8080"
+  read_timeout: 5s
+  write_timeout: 10s
+  enable_reload_endpoint: false
+
+scheduler:
+  default_interval: 30s
+  default_timeout: 5s
+
+# SQLite is embedded: no additional database container is required.
+storage:
+  type: sqlite
+  retention: 30d
+  sqlite:
+    path: /data/micro-health-checker.db
+
+checks:
+  - id: homepage
+    name: Homepage
+    type: http
+    interval: 30s
+    timeout: 5s
+    http:
+      url: http://homepage:3000
+      expected_status: [200]
+
+  - id: postgres-prod
+    name: PostgreSQL Production
+    type: postgres
+    interval: 15s
+    timeout: 3s
+    postgres:
+      dsn: ${POSTGRES_PROD_DSN}
+      query: SELECT 1
+
+  - id: legacy-tcp-service
+    name: Legacy TCP Service
+    type: tcp
+    interval: 30s
+    timeout: 3s
+    tcp:
+      address: legacy-service:9100

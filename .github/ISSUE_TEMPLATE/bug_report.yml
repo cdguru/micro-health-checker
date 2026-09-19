@@ -1,0 +1,57 @@
+name: Bug report
+description: Report a reproducible problem
+title: "[Bug]: "
+labels: [bug, triage]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for helping improve micro-health-checker. Redact every credential and private address.
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      placeholder: v0.1.0 or commit SHA
+    validations: {required: true}
+  - type: dropdown
+    id: deployment
+    attributes:
+      label: Deployment
+      options: [Docker Compose, Docker, Kubernetes, Binary, Other]
+    validations: {required: true}
+  - type: dropdown
+    id: storage
+    attributes:
+      label: Storage backend
+      options: [SQLite, PostgreSQL]
+    validations: {required: true}
+  - type: textarea
+    id: description
+    attributes:
+      label: Problem
+      description: What happened and what did you expect?
+    validations: {required: true}
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction steps
+      placeholder: "1. Configure…\n2. Request…\n3. Observe…"
+    validations: {required: true}
+  - type: textarea
+    id: config
+    attributes:
+      label: Redacted configuration
+      render: yaml
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant JSON logs
+      render: shell
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Safety checklist
+      options:
+        - label: I removed passwords, tokens, DSNs and private information.
+          required: true
+        - label: I searched existing issues.
+          required: true

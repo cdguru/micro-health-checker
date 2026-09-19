@@ -1,0 +1,37 @@
+services:
+  micro-health-checker:
+    build:
+      context: .
+    image: micro-health-checker:local
+    container_name: micro-health-checker
+    restart: unless-stopped
+    environment:
+      MHC_CONFIG: /etc/micro-health-checker/config.yml
+      MHC_LOG_LEVEL: ${MHC_LOG_LEVEL:-info}
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./configs/config.compose.yml:/etc/micro-health-checker/config.yml:ro
+      - mhc-data:/data
+    healthcheck:
+      test: ["CMD", "/micro-health-checker", "-healthcheck-url", "http://127.0.0.1:8080/-/ready"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+
+  demo-postgres:
+    image: postgres:17-alpine
+    profiles: ["demo"]
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - demo-postgres-data:/var/lib/postgresql/data
+
+volumes:
+  mhc-data:
+  demo-postgres-data:

@@ -1,0 +1,23 @@
+server:
+  address: ":8080"
+  read_timeout: 5s
+  write_timeout: 10s
+
+scheduler:
+  default_interval: 15s
+  default_timeout: 3s
+
+storage:
+  type: sqlite
+  retention: 30d
+  sqlite:
+    path: /data/micro-health-checker.db
+
+checks:
+  - id: micro-health-checker
+    name: micro-health-checker
+    type: http
+    http:
+      url: http://127.0.0.1:8080/-/ready
+      expected_status: [200]
+      body_contains: ready

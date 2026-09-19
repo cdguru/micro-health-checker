@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="220" viewBox="0 0 900 220" role="img" aria-labelledby="title desc">
+  <title id="title">micro-health-checker</title>
+  <desc id="desc">A green protocol health pulse inside a dark rounded square beside the project name.</desc>
+  <defs>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#17243a"/><stop offset="1" stop-color="#0a101a"/></linearGradient>
+    <linearGradient id="pulse" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#39e58c"/><stop offset="1" stop-color="#73a7ff"/></linearGradient>
+  </defs>
+  <rect width="900" height="220" rx="34" fill="#080c14"/>
+  <rect x="34" y="34" width="152" height="152" rx="35" fill="url(#panel)" stroke="#283a55" stroke-width="3"/>
+  <path d="M55 112h28l12-31 22 63 18-45 12 13h20" fill="none" stroke="url(#pulse)" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="167" cy="112" r="7" fill="#73a7ff"/>
+  <text x="220" y="104" fill="#f1f6ff" font-family="Inter,ui-sans-serif,system-ui,sans-serif" font-size="47" font-weight="750" letter-spacing="-1.5">micro-health-checker</text>
+  <text x="223" y="142" fill="#8ea0b8" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="18" letter-spacing="1">PROTOCOL HEALTH. REST SIGNALS.</text>
+</svg>

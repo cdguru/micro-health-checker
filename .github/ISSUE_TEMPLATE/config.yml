@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Setup and support question
+    url: https://github.com/christiandente/micro-health-checker/discussions
+    about: Ask operational questions in GitHub Discussions.
+  - name: Security vulnerability
+    url: https://github.com/christiandente/micro-health-checker/security/advisories/new
+    about: Report vulnerabilities privately.

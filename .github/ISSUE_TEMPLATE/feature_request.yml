@@ -1,0 +1,40 @@
+name: Feature or driver proposal
+description: Propose a capability, product profile or protocol driver
+title: "[Proposal]: "
+labels: [enhancement, proposal]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Operational problem
+      description: Describe the failure that a TCP or generic HTTP probe cannot detect.
+    validations: {required: true}
+  - type: input
+    id: product
+    attributes:
+      label: Product and protocol
+      placeholder: Aerospike / info protocol
+    validations: {required: true}
+  - type: textarea
+    id: semantic
+    attributes:
+      label: Proposed semantic check
+      description: Include official protocol or health-command documentation.
+    validations: {required: true}
+  - type: dropdown
+    id: mutation
+    attributes:
+      label: Does the check mutate target state?
+      options: [No, Yes, Unsure]
+    validations: {required: true}
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Could an existing HTTP, SQL, gRPC or TCP engine express this check?
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      options:
+        - label: I may be able to help implement or test this proposal.

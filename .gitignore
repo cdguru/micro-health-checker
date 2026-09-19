@@ -1,0 +1,14 @@
+.env
+.idea/
+.vscode/
+.DS_Store
+__pycache__/
+*.pyc
+bin/
+dist/
+coverage.out
+data/
+*.db
+*.db-shm
+*.db-wal
+micro-health-checker
