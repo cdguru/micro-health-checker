@@ -1,28 +1,261 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="color-scheme" content="dark">
-  <title>micro-health-checker</title>
-  <style>
-    :root{--bg:#080c14;--panel:#101722;--panel2:#141d2b;--text:#eef4ff;--muted:#8997ab;--line:#223044;--ok:#35d07f;--err:#ff6474;--unknown:#f0b44c;--accent:#73a7ff}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0,#15233d 0,transparent 35%),var(--bg);color:var(--text);font:14px/1.5 ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.wrap{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:42px 0 70px}header{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:28px}.eyebrow{color:var(--accent);font:700 11px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.18em;text-transform:uppercase}h1{font-size:clamp(27px,5vw,44px);line-height:1.05;margin:8px 0 5px;letter-spacing:-.04em}.subtitle{color:var(--muted);margin:0}.live{display:flex;align-items:center;gap:8px;color:var(--muted);white-space:nowrap}.pulse{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 5px #35d07f1a}.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}.stat,.card{background:linear-gradient(145deg,#131c2aeb,#0e151feb);border:1px solid var(--line);box-shadow:0 20px 50px #0003}.stat{border-radius:14px;padding:17px 18px}.stat span{display:block;color:var(--muted);font-size:12px}.stat strong{display:block;font-size:25px;margin-top:3px}.toolbar{display:flex;align-items:center;gap:12px;margin:16px 0}.search{flex:1;background:#0d141f;border:1px solid var(--line);border-radius:10px;color:var(--text);padding:11px 13px;outline:none}.search:focus{border-color:var(--accent)}.updated{color:var(--muted);font-size:12px}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:14px}.card{border-radius:15px;padding:17px;position:relative;overflow:hidden}.card:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--unknown)}.card.ok:before{background:var(--ok)}.card.error:before{background:var(--err)}.top{display:flex;align-items:start;justify-content:space-between;gap:16px}.name{font-weight:750;font-size:16px}.meta{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);font-size:11px;margin-top:3px}.badge{border:1px solid currentColor;border-radius:999px;padding:3px 8px;font-size:10px;font-weight:800;letter-spacing:.08em}.ok .badge{color:var(--ok)}.error .badge{color:var(--err)}.unknown .badge,.disabled .badge{color:var(--unknown)}.latency{font-size:27px;font-weight:760;letter-spacing:-.04em;margin:22px 0 2px}.latency small{font-size:12px;color:var(--muted);font-weight:500;letter-spacing:0}.details{display:flex;justify-content:space-between;color:var(--muted);font-size:11px}.error-text{color:#ff9ba6;background:#ff64740d;border:1px solid #ff647426;border-radius:8px;padding:8px;margin-top:12px;font:11px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-word}.empty{color:var(--muted);padding:60px 0;text-align:center;grid-column:1/-1}@media(max-width:700px){header{align-items:start;flex-direction:column}.summary{grid-template-columns:repeat(2,1fr)}.wrap{padding-top:25px}.updated{display:none}}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>micro-health-checker</title>
+<style>
+  :root{
+    --bg:#0a0a0b;
+    --text:#f2f2f3;
+    --text-2:#9a9aa1;
+    --text-3:#616168;
+    --line:#1d1d20;
+    --line-2:#28282c;
+    --ok:#2ea043;
+    --err:#e5534b;
+    --warn:#c9973b;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",ui-sans-serif,system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+  .page{width:min(880px,calc(100% - 40px));margin:0 auto;padding:52px 0 90px}
+
+  /* top bar */
+  .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:44px}
+  .brand{display:flex;align-items:center;gap:8px;font-weight:600;color:var(--text)}
+  .brand .live-dot{width:6px;height:6px;border-radius:50%;background:var(--ok)}
+  .switcher{display:flex;align-items:center;gap:16px;font-size:13px}
+  .switcher button{all:unset;cursor:pointer;color:var(--text-3)}
+  .switcher button:hover{color:var(--text-2)}
+  .switcher button[aria-pressed="true"]{color:var(--text);font-weight:600}
+
+  /* global status */
+  .status-row{display:flex;align-items:baseline;gap:10px}
+  .status-row .dot{width:9px;height:9px;border-radius:50%;background:var(--ok);flex:none}
+  .status-row.error .dot{background:var(--err)}
+  .status-row.warn .dot{background:var(--warn)}
+  .status-row h1{font-size:23px;font-weight:600;letter-spacing:-.01em;margin:0}
+  .status-sub{color:var(--text-2);font-size:13px;margin:6px 0 36px}
+
+  /* toolbar */
+  .toolbar{display:flex;align-items:center;gap:16px;padding-bottom:10px;border-bottom:1px solid var(--line);margin-bottom:4px}
+  .search{flex:1;background:transparent;border:0;color:var(--text);font:inherit;padding:4px 0;outline:none}
+  .search::placeholder{color:var(--text-3)}
+  .updated{color:var(--text-3);font-size:12px;white-space:nowrap}
+
+  .empty{color:var(--text-3);padding:56px 0;text-align:center}
+
+  /* shared row bits (list + grouped variants) */
+  .row{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}
+  .row .dot{width:6px;height:6px;border-radius:50%;background:var(--ok);flex:none}
+  .row.error .dot{background:var(--err)}
+  .row.warn .dot{background:var(--warn)}
+  .row-main{flex:1;min-width:0}
+  .row-name{font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .row-id{font-family:var(--mono);color:var(--text-3);font-size:12px;margin-top:1px}
+  .row-status{width:96px;color:var(--text-2);font-size:13px;flex:none}
+  .row-metric{width:76px;text-align:right;font-family:var(--mono);color:var(--text-2);font-size:13px;flex:none}
+  .row-age{width:96px;text-align:right;color:var(--text-3);font-size:12px;flex:none}
+  .row-error{margin:-2px 0 10px 20px;padding:0 0 10px;color:#c77c78;font-family:var(--mono);font-size:12px;border-bottom:1px solid var(--line)}
+  @media(max-width:640px){.row-status,.row-age{display:none}}
+
+  /* group headers (grouped variant) */
+  .group-head{display:flex;align-items:baseline;gap:8px;margin:28px 0 2px}
+  .group-head:first-child{margin-top:4px}
+  .group-head .label{font-weight:600;font-size:13px;color:var(--text)}
+  .group-head .count{color:var(--text-3);font-size:13px}
+
+  /* table variant */
+  table{width:100%;border-collapse:collapse}
+  table thead th{text-align:left;font-weight:500;color:var(--text-3);font-size:12px;padding:0 20px 10px 0;border-bottom:1px solid var(--line)}
+  table th:last-child,table td:last-child{padding-right:0}
+  table th.num,table td.num{text-align:right}
+  table tbody td{padding:10px 20px 10px 0;border-bottom:1px solid var(--line);vertical-align:middle}
+  table tbody tr:hover td{background:rgba(255,255,255,.015)}
+  table .dot{width:6px;height:6px;border-radius:50%;background:var(--ok);display:inline-block;margin-right:9px}
+  table tr.error .dot{background:var(--err)}
+  table tr.warn .dot{background:var(--warn)}
+  table td.name{color:var(--text);font-weight:500;white-space:nowrap}
+  table td.type,table td.status{color:var(--text-2);font-size:13px;white-space:nowrap}
+  table td.num{font-family:var(--mono);color:var(--text-2);font-size:13px;white-space:nowrap}
+  table td.age{color:var(--text-3);font-size:12px;white-space:nowrap}
+  @media(max-width:640px){table td.type,table th.type,table td.age,table th.age{display:none}}
+</style>
 </head>
-<body>
-  <main class="wrap">
-    <header><div><div class="eyebrow">Protocol-to-REST health gateway</div><h1>micro-health-checker</h1><p class="subtitle">Real protocol checks. Simple REST signals.</p></div><div class="live"><span class="pulse"></span><span id="version">connecting…</span></div></header>
-    <section class="summary"><div class="stat"><span>Total checks</span><strong id="total">–</strong></div><div class="stat"><span>Healthy</span><strong id="ok">–</strong></div><div class="stat"><span>Failing</span><strong id="error">–</strong></div><div class="stat"><span>Unknown / disabled</span><strong id="other">–</strong></div></section>
-    <div class="toolbar"><input id="search" class="search" type="search" placeholder="Filter checks…" autocomplete="off"><span id="updated" class="updated"></span></div>
-    <section id="grid" class="grid"><div class="empty">Loading health checks…</div></section>
+<body data-variant="list">
+  <main class="page">
+    <div class="topbar">
+      <div class="brand"><span class="live-dot"></span><span>micro-health-checker</span></div>
+      <div class="switcher" role="tablist" aria-label="Layout">
+        <button type="button" data-set-variant="list" aria-pressed="true">List</button>
+        <button type="button" data-set-variant="table" aria-pressed="false">Table</button>
+        <button type="button" data-set-variant="grouped" aria-pressed="false">Grouped</button>
+      </div>
+    </div>
+
+    <div class="status-row" id="statusRow"><span class="dot"></span><h1 id="statusTitle">Loading…</h1></div>
+    <p class="status-sub" id="statusSub"></p>
+
+    <div class="toolbar">
+      <input id="search" class="search" type="search" placeholder="Filter checks…" autocomplete="off">
+      <span class="updated" id="updated"></span>
+    </div>
+
+    <div id="results"><div class="empty">Loading health checks…</div></div>
   </main>
+
   <script>
-    const grid=document.querySelector('#grid'), search=document.querySelector('#search'); let checks=[];
-    const esc=v=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
-    const age=v=>{if(!v)return'never';const s=Math.max(0,Math.floor((Date.now()-new Date(v))/1000));if(s<60)return`${s}s ago`;if(s<3600)return`${Math.floor(s/60)}m ago`;return`${Math.floor(s/3600)}h ago`};
-    function render(){const q=search.value.trim().toLowerCase(), visible=checks.filter(c=>`${c.name} ${c.id} ${c.type}`.toLowerCase().includes(q));grid.innerHTML=visible.length?visible.map(c=>`<article class="card ${esc(c.status)}"><div class="top"><div><div class="name">${esc(c.name)}</div><div class="meta">${esc(c.id)} · ${esc(c.type)}</div></div><span class="badge">${esc(c.status).toUpperCase()}</span></div><div class="latency">${c.started_at?Number(c.duration_ms).toFixed(1):'–'} <small>ms</small></div><div class="details"><span>Checked ${age(c.started_at)}</span><span>${c.consecutive_failures||0} consecutive failures</span></div>${c.error?`<div class="error-text">${esc(c.error)}</div>`:''}</article>`).join(''):'<div class="empty">No checks match this filter.</div>'}
-    async function refresh(){try{const r=await fetch('/api/v1/status',{cache:'no-store'});if(!r.ok)throw new Error(`HTTP ${r.status}`);const d=await r.json();checks=d.checks||[];document.querySelector('#version').textContent=`v${d.version} · live`;document.querySelector('#total').textContent=d.summary.total;document.querySelector('#ok').textContent=d.summary.ok;document.querySelector('#error').textContent=d.summary.error;document.querySelector('#other').textContent=d.summary.unknown+d.summary.disabled;document.querySelector('#updated').textContent=`Updated ${new Date().toLocaleTimeString()}`;render()}catch(e){document.querySelector('#version').textContent='API unavailable';grid.innerHTML=`<div class="empty">Unable to load status: ${esc(e.message)}</div>`}}
-    search.addEventListener('input',render);refresh();setInterval(refresh,5000);
+    const results = document.querySelector('#results');
+    const search = document.querySelector('#search');
+    const body = document.body;
+    let checks = [];
+
+    const esc = v => String(v ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+
+    const age = v => {
+      if (!v) return 'never';
+      const s = Math.max(0, Math.floor((Date.now() - new Date(v)) / 1000));
+      if (s < 60) return `${s}s ago`;
+      if (s < 3600) return `${Math.floor(s / 60)}m ago`;
+      return `${Math.floor(s / 3600)}h ago`;
+    };
+
+    const latency = c => c.started_at ? `${Number(c.duration_ms).toFixed(1)} ms` : '–';
+
+    const STATUS = {
+      ok: { label: 'Operational', cls: 'ok' },
+      error: { label: 'Error', cls: 'error' },
+      unknown: { label: 'Unknown', cls: 'warn' },
+      disabled: { label: 'Disabled', cls: 'warn' },
+    };
+    const statusOf = c => STATUS[c.status] || { label: esc(c.status), cls: '' };
+
+    function filtered() {
+      const q = search.value.trim().toLowerCase();
+      if (!q) return checks;
+      return checks.filter(c => `${c.name} ${c.id} ${c.type}`.toLowerCase().includes(q));
+    }
+
+    function rowHTML(c) {
+      const st = statusOf(c);
+      const errorLine = c.error ? `<div class="row-error">${esc(c.error)}</div>` : '';
+      return `<div class="row ${st.cls}">
+        <span class="dot"></span>
+        <div class="row-main">
+          <div class="row-name">${esc(c.name)}</div>
+          <div class="row-id">${esc(c.id)} · ${esc(c.type)}</div>
+        </div>
+        <div class="row-status">${st.label}</div>
+        <div class="row-metric">${latency(c)}</div>
+        <div class="row-age">${age(c.started_at)}</div>
+      </div>${errorLine}`;
+    }
+
+    function renderList(list) {
+      results.innerHTML = list.map(rowHTML).join('');
+    }
+
+    function renderTable(list) {
+      const rows = list.map(c => {
+        const st = statusOf(c);
+        return `<tr class="${st.cls}" title="${c.error ? esc(c.error) : ''}">
+          <td class="name"><span class="dot"></span>${esc(c.name)}</td>
+          <td class="type">${esc(c.id)} · ${esc(c.type)}</td>
+          <td class="status">${st.label}</td>
+          <td class="num">${latency(c)}</td>
+          <td class="age">${age(c.started_at)}</td>
+          <td class="num">${c.consecutive_failures || 0}</td>
+        </tr>`;
+      }).join('');
+      results.innerHTML = `<table>
+        <thead><tr>
+          <th>Check</th><th class="type">ID · Type</th><th>Status</th>
+          <th class="num">Latency</th><th class="age">Last checked</th><th class="num">Failures</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+    }
+
+    function renderGrouped(list) {
+      const groups = [
+        { key: 'failing', label: 'Failing', items: list.filter(c => c.status === 'error') },
+        { key: 'attention', label: 'Unknown / disabled', items: list.filter(c => c.status === 'unknown' || c.status === 'disabled') },
+        { key: 'operational', label: 'Operational', items: list.filter(c => c.status === 'ok') },
+      ].filter(g => g.items.length);
+      results.innerHTML = groups.map(g => `
+        <div class="group-head"><span class="label">${g.label}</span><span class="count">${g.items.length}</span></div>
+        ${g.items.map(rowHTML).join('')}
+      `).join('');
+    }
+
+    function render() {
+      const list = filtered();
+      if (!list.length) {
+        results.innerHTML = `<div class="empty">${checks.length ? 'No checks match this filter.' : 'No checks configured.'}</div>`;
+        return;
+      }
+      const variant = body.dataset.variant;
+      if (variant === 'table') renderTable(list);
+      else if (variant === 'grouped') renderGrouped(list);
+      else renderList(list);
+    }
+
+    function setVariant(v) {
+      body.dataset.variant = v;
+      localStorage.setItem('mhc-variant', v);
+      document.querySelectorAll('[data-set-variant]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.setVariant === v)));
+      render();
+    }
+
+    document.querySelectorAll('[data-set-variant]').forEach(b => {
+      b.addEventListener('click', () => setVariant(b.dataset.setVariant));
+    });
+    setVariant(localStorage.getItem('mhc-variant') || 'list');
+
+    function updateStatus(summary) {
+      const statusRow = document.querySelector('#statusRow');
+      const title = document.querySelector('#statusTitle');
+      const sub = document.querySelector('#statusSub');
+      statusRow.classList.remove('error', 'warn');
+      if (!summary.total) {
+        title.textContent = 'No checks configured';
+        statusRow.classList.add('warn');
+      } else if (summary.error > 0) {
+        title.textContent = `${summary.error} check${summary.error === 1 ? '' : 's'} failing`;
+        statusRow.classList.add('error');
+      } else {
+        title.textContent = 'All systems operational';
+      }
+      const parts = [`${summary.total} checks`, `${summary.ok} operational`];
+      if (summary.error) parts.push(`${summary.error} failing`);
+      if (summary.unknown) parts.push(`${summary.unknown} unknown`);
+      if (summary.disabled) parts.push(`${summary.disabled} disabled`);
+      sub.textContent = parts.join(' · ');
+    }
+
+    async function refresh() {
+      try {
+        const r = await fetch('/api/v1/status', { cache: 'no-store' });
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        const d = await r.json();
+        checks = d.checks || [];
+        updateStatus(d.summary);
+        document.querySelector('#updated').textContent = `Updated ${new Date().toLocaleTimeString()}`;
+        render();
+      } catch (e) {
+        document.querySelector('#statusTitle').textContent = 'Status unavailable';
+        document.querySelector('#statusRow').classList.add('error');
+        document.querySelector('#statusSub').textContent = e.message;
+        results.innerHTML = `<div class="empty">Unable to load status: ${esc(e.message)}</div>`;
+      }
+    }
+
+    search.addEventListener('input', render);
+    refresh();
+    setInterval(refresh, 5000);
   </script>
 </body>
 </html>
