@@ -139,3 +139,14 @@ Requiere reiniciar:
 - Configuración del endpoint de recarga
 
 Si un cambio es inválido, los workers existentes continúan usando la última configuración válida.
+
+### Docker: montá el directorio, no el archivo
+
+Al ejecutar con Docker, montá el **directorio** que contiene el archivo de configuración, no el archivo en sí:
+
+```yaml
+volumes:
+  - ./configs:/etc/micro-health-checker:ro
+```
+
+Montar un único archivo (`./configs/config.yml:/etc/micro-health-checker/config.yml:ro`) rompe la recarga automática: los editores y herramientas que guardan de forma atómica (escriben un archivo temporal y luego lo renombran sobre el original — el comportamiento predeterminado de vim, VS Code, `sed -i`, etc.) reemplazan el inodo del archivo en el host, pero la capa de compartición de archivos de Docker (osxfs/gRPC-FUSE en Docker Desktop) no propaga una notificación de cambio para ese montaje de un solo archivo dentro del contenedor. Montar el directorio padre mantiene la notificación funcionando porque lo que cambia es la entrada del propio directorio.
