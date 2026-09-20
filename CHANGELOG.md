@@ -20,5 +20,6 @@ All notable changes are documented here. The project follows [Semantic Versionin
 ### Fixed
 
 - Anchor the binary-only `.gitignore` rule so `cmd/micro-health-checker/main.go` is tracked and available to Docker builds.
+- Docker Compose example: bind-mount the config directory instead of a single file so hot reload works when editors save atomically (previously the file-sharing layer silently dropped the change notification, requiring a container restart).
 
 [Unreleased]: https://github.com/christiandente/micro-health-checker/commits/main
