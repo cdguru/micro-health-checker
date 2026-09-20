@@ -4,6 +4,10 @@ All notable changes are documented here. The project follows [Semantic Versionin
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-09-20
+
+Initial public release.
+
 ### Added
 
 - YAML configuration with environment-variable expansion and hot reload.
@@ -22,4 +26,5 @@ All notable changes are documented here. The project follows [Semantic Versionin
 - Anchor the binary-only `.gitignore` rule so `cmd/micro-health-checker/main.go` is tracked and available to Docker builds.
 - Docker Compose example: bind-mount the config directory instead of a single file so hot reload works when editors save atomically (previously the file-sharing layer silently dropped the change notification, requiring a container restart).
 
-[Unreleased]: https://github.com/christiandente/micro-health-checker/commits/main
+[Unreleased]: https://github.com/christiandente/micro-health-checker/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/christiandente/micro-health-checker/releases/tag/v0.1.0
