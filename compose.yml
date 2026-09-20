@@ -5,13 +5,20 @@ services:
     image: micro-health-checker:local
     container_name: micro-health-checker
     restart: unless-stopped
+    # The Dockerfile's default CMD passes -config explicitly, which always
+    # wins over MHC_CONFIG, so the flag must match the mounted file below.
+    command: ["-config", "/etc/micro-health-checker/config.compose.yml"]
     environment:
-      MHC_CONFIG: /etc/micro-health-checker/config.yml
       MHC_LOG_LEVEL: ${MHC_LOG_LEVEL:-info}
     ports:
       - "8080:8080"
     volumes:
-      - ./configs/config.compose.yml:/etc/micro-health-checker/config.yml:ro
+      # Mount the directory (not the single file): bind-mounting a single file
+      # breaks hot reload because Docker's file-sharing layer (osxfs/gRPC-FUSE
+      # on Docker Desktop) doesn't propagate change notifications when editors
+      # replace the file atomically (write temp file + rename). Mounting the
+      # parent directory lets fsnotify inside the container see the change.
+      - ./configs:/etc/micro-health-checker:ro
       - mhc-data:/data
     healthcheck:
       test: ["CMD", "/micro-health-checker", "-healthcheck-url", "http://127.0.0.1:8080/-/ready"]

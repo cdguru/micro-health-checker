@@ -137,3 +137,14 @@ Restart required:
 - Reload endpoint setting
 
 If a change is invalid, the existing workers continue using the last-known-good configuration.
+
+### Docker: bind-mount the directory, not the file
+
+When running under Docker, bind-mount the **directory** that contains the config file, not the file itself:
+
+```yaml
+volumes:
+  - ./configs:/etc/micro-health-checker:ro
+```
+
+Bind-mounting a single file (`./configs/config.yml:/etc/micro-health-checker/config.yml:ro`) breaks hot reload: editors and tools that save atomically (write a temp file, then rename it over the original — the default for vim, VS Code, `sed -i`, etc.) replace the file's inode on the host, but Docker's file-sharing layer (osxfs/gRPC-FUSE on Docker Desktop) does not propagate a change notification for that single-file mount into the container. Mounting the parent directory keeps the notification working because the directory entry itself is what changes.
