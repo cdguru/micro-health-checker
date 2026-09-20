@@ -12,10 +12,10 @@ import (
 	"strings"
 	"time"
 
-	appmetrics "github.com/christiandente/micro-health-checker/internal/metrics"
-	"github.com/christiandente/micro-health-checker/internal/scheduler"
-	"github.com/christiandente/micro-health-checker/internal/storage"
-	"github.com/christiandente/micro-health-checker/internal/version"
+	appmetrics "github.com/cdguru/micro-health-checker/internal/metrics"
+	"github.com/cdguru/micro-health-checker/internal/scheduler"
+	"github.com/cdguru/micro-health-checker/internal/storage"
+	"github.com/cdguru/micro-health-checker/internal/version"
 )
 
 //go:embed web/index.html

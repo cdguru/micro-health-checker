@@ -1,4 +1,4 @@
-module github.com/christiandente/micro-health-checker
+module github.com/cdguru/micro-health-checker
 
 go 1.26.0
 

@@ -13,12 +13,12 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/christiandente/micro-health-checker/internal/config"
-	appmetrics "github.com/christiandente/micro-health-checker/internal/metrics"
-	"github.com/christiandente/micro-health-checker/internal/scheduler"
-	"github.com/christiandente/micro-health-checker/internal/server"
-	"github.com/christiandente/micro-health-checker/internal/storage"
-	"github.com/christiandente/micro-health-checker/internal/version"
+	"github.com/cdguru/micro-health-checker/internal/config"
+	appmetrics "github.com/cdguru/micro-health-checker/internal/metrics"
+	"github.com/cdguru/micro-health-checker/internal/scheduler"
+	"github.com/cdguru/micro-health-checker/internal/server"
+	"github.com/cdguru/micro-health-checker/internal/storage"
+	"github.com/cdguru/micro-health-checker/internal/version"
 )
 
 func main() {

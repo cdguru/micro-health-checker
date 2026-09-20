@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/christiandente/micro-health-checker/internal/config"
+	"github.com/cdguru/micro-health-checker/internal/config"
 )
 
 const maxResponseBody = 1024 * 1024

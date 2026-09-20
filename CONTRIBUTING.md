@@ -17,7 +17,7 @@ Thank you for helping make semantic service health easier to operate.
 Requirements: Go 1.26+, Git and optionally Docker.
 
 ```bash
-git clone https://github.com/christiandente/micro-health-checker.git
+git clone https://github.com/cdguru/micro-health-checker.git
 cd micro-health-checker
 go mod download
 make test

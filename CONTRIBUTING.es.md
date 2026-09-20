@@ -19,7 +19,7 @@ Gracias por ayudar a que la salud semántica de servicios sea más fácil de ope
 Requisitos: Go 1.26+, Git y Docker de manera opcional.
 
 ```bash
-git clone https://github.com/christiandente/micro-health-checker.git
+git clone https://github.com/cdguru/micro-health-checker.git
 cd micro-health-checker
 go mod download
 make test

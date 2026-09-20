@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/christiandente/micro-health-checker/internal/config"
+	"github.com/cdguru/micro-health-checker/internal/config"
 )
 
 func TestTCPChecker(t *testing.T) {
