@@ -5,11 +5,11 @@
   <p><strong>Turn non-HTTP services into simple REST health endpoints.</strong></p>
   <p>One small container. YAML configuration. SQLite by default. Built for Homepage, Prometheus, homelabs and platform teams.</p>
 
-  [![CI](https://github.com/christiandente/micro-health-checker/actions/workflows/ci.yml/badge.svg)](https://github.com/christiandente/micro-health-checker/actions/workflows/ci.yml)
-  [![CodeQL](https://github.com/christiandente/micro-health-checker/actions/workflows/codeql.yml/badge.svg)](https://github.com/christiandente/micro-health-checker/actions/workflows/codeql.yml)
-  [![Release](https://img.shields.io/github/v/release/christiandente/micro-health-checker?display_name=tag&sort=semver)](https://github.com/christiandente/micro-health-checker/releases)
-  [![Container](https://img.shields.io/badge/container-ghcr.io-2496ed?logo=docker&logoColor=white)](https://github.com/christiandente/micro-health-checker/pkgs/container/micro-health-checker)
-  [![License](https://img.shields.io/github/license/christiandente/micro-health-checker)](LICENSE)
+  [![CI](https://github.com/cdguru/micro-health-checker/actions/workflows/ci.yml/badge.svg)](https://github.com/cdguru/micro-health-checker/actions/workflows/ci.yml)
+  [![CodeQL](https://github.com/cdguru/micro-health-checker/actions/workflows/codeql.yml/badge.svg)](https://github.com/cdguru/micro-health-checker/actions/workflows/codeql.yml)
+  [![Release](https://img.shields.io/github/v/release/cdguru/micro-health-checker?display_name=tag&sort=semver)](https://github.com/cdguru/micro-health-checker/releases)
+  [![Container](https://img.shields.io/badge/container-ghcr.io-2496ed?logo=docker&logoColor=white)](https://github.com/cdguru/micro-health-checker/pkgs/container/micro-health-checker)
+  [![License](https://img.shields.io/github/license/cdguru/micro-health-checker)](LICENSE)
   [![Go](https://img.shields.io/badge/Go-1.26+-00ADD8?logo=go&logoColor=white)](go.mod)
   [![Documentación en español](https://img.shields.io/badge/docs-Español-f5c542)](README.es.md)
 
@@ -62,7 +62,7 @@ The [integration catalog](docs/INTEGRATIONS.md) lists all 30 target products, th
 ### Docker Compose
 
 ```bash
-git clone https://github.com/christiandente/micro-health-checker.git
+git clone https://github.com/cdguru/micro-health-checker.git
 cd micro-health-checker
 cp .env.example .env
 docker compose up -d --build
@@ -90,7 +90,7 @@ docker run --rm \
   -e POSTGRES_PROD_DSN='postgres://healthcheck:secret@db:5432/app?sslmode=require' \
   -v "$PWD/config.yml:/etc/micro-health-checker/config.yml:ro" \
   -v micro-health-checker-data:/data \
-  ghcr.io/christiandente/micro-health-checker:latest
+  ghcr.io/cdguru/micro-health-checker:latest
 ```
 
 ### Build from source

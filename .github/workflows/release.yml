@@ -36,7 +36,7 @@ jobs:
           archive="micro-health-checker_${version}_${GOOS}_${GOARCH}"
           mkdir -p "dist/${archive}"
           go build -buildvcs=false -trimpath \
-            -ldflags="-s -w -X github.com/christiandente/micro-health-checker/internal/version.Version=${version} -X github.com/christiandente/micro-health-checker/internal/version.Commit=${GITHUB_SHA} -X github.com/christiandente/micro-health-checker/internal/version.BuildDate=$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            -ldflags="-s -w -X github.com/cdguru/micro-health-checker/internal/version.Version=${version} -X github.com/cdguru/micro-health-checker/internal/version.Commit=${GITHUB_SHA} -X github.com/cdguru/micro-health-checker/internal/version.BuildDate=$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
             -o "dist/${archive}/micro-health-checker" ./cmd/micro-health-checker
           cp README.md README.es.md \
             CONTRIBUTING.md CONTRIBUTING.es.md \

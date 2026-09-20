@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/christiandente/micro-health-checker/internal/config"
+	"github.com/cdguru/micro-health-checker/internal/config"
 )
 
 type Checker interface {

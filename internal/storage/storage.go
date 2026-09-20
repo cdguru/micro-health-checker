@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/christiandente/micro-health-checker/internal/config"
+	"github.com/cdguru/micro-health-checker/internal/config"
 	_ "github.com/jackc/pgx/v5/stdlib"
 	_ "modernc.org/sqlite"
 )

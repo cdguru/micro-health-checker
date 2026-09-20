@@ -9,10 +9,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/christiandente/micro-health-checker/internal/checker"
-	"github.com/christiandente/micro-health-checker/internal/config"
-	appmetrics "github.com/christiandente/micro-health-checker/internal/metrics"
-	"github.com/christiandente/micro-health-checker/internal/storage"
+	"github.com/cdguru/micro-health-checker/internal/checker"
+	"github.com/cdguru/micro-health-checker/internal/config"
+	appmetrics "github.com/cdguru/micro-health-checker/internal/metrics"
+	"github.com/cdguru/micro-health-checker/internal/storage"
 )
 
 var (
